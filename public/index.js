@@ -23,7 +23,7 @@ const render = Render.create({
         background: "transparent",
     },
 });
-console.log(render);
+// console.log(render);
 // create a runner
 const runner = Runner.create();
 
@@ -54,6 +54,7 @@ Events.on(engine, "collisionStart", (event) => {
 
 function init() {
     createStage();
+    title();
 
     // run the renderer
     Render.run(render);
@@ -61,6 +62,8 @@ function init() {
 
     // run the engine
     Runner.run(runner, engine);
+
+    runner.enabled = false;
 }
 
 init();
@@ -298,3 +301,20 @@ d.render.sprite = {
     xOffset: 0.5,
     yOffset: 0.5,
 };
+
+async function title() {
+    const back = document.getElementById("back");
+    back.classList.remove("hide");
+    const modal = document.getElementById("modal");
+    modal.querySelector("button").addEventListener("click", () => {
+        back.classList.add("hide");
+        modal.classList.add("hide");
+        window.setTimeout(() => {
+            runner.enabled = true;
+        }, 1);
+    });
+    const content = document.getElementById("mcontent");
+    const req = await fetch("/start");
+    const text = await req.text();
+    content.innerText = text;
+}
