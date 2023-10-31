@@ -1,8 +1,12 @@
 :root {
-    --main-bg-color: rgb(255, 230, 161);
+    --main-bg-color: #ffe5ca;
+    --modal-content-color: #fff3e2;
+    --modal-content-shadow: #cfc5b6;
+    --border-color: #fff3e2;
 }
 body {
     position: relative;
+    font-family: "メイリオ", "Meiryo", sans-serif;
 }
 
 #container {
@@ -21,6 +25,7 @@ canvas {
     width: 400px;
     height: 500px;
     background-color: var(--main-bg-color);
+    border: 1px solid var(--border-color);
     position: absolute;
     left: 0;
     top: 0;
@@ -35,13 +40,17 @@ canvas {
 
 #modal > button {
     border-radius: 15px;
+    border-color: var(--border-color);
+    background-color: var(--modal-content-color);
     width: 30%;
     height: 10%;
     margin: 5%;
     margin-top: auto;
 }
 #modal > div {
-    background-color: rgb(255, 252, 235);
+    background-color: var(--modal-content-color);
+    border-top: 1px solid var(--modal-content-shadow);
+    border-bottom: 1px solid var(--modal-content-shadow);
     border-radius: 15px;
     margin-top: 5%;
     width: 80%;
