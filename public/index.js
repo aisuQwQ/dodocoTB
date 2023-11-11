@@ -28,7 +28,7 @@ const render = Render.create({
 const runner = Runner.create();
 
 //click
-document.getElementById("container").addEventListener("click", (e) => {
+document.querySelector("#container > canvas").addEventListener("click", (e) => {
     if (runner.enabled == true) {
         console.log(e.clientX);
         // let box = Bodies.rectangle(e.clientX, 0, 80, 80);
@@ -38,7 +38,8 @@ document.getElementById("container").addEventListener("click", (e) => {
 });
 
 Events.on(engine.world, "afterAdd", (e) => {
-    document.getElementById("score").innerText = e.source.bodies.length - 2;
+    document.getElementById("score").innerText =
+        (e.source.bodies.length - 2) / 4;
 });
 
 //death
