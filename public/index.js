@@ -313,9 +313,18 @@ async function title() {
         window.setTimeout(() => {
             runner.enabled = true;
         }, 1);
+        playBGM();
     });
     const content = document.getElementById("mcontent");
     const req = await fetch("/start");
     const text = await req.text();
     content.innerText = text;
+}
+
+function playBGM() {
+    const bgm = new Audio("/sounds/Flow_and_Breeze.mp3");
+    bgm.volume = 0.1;
+    bgm.loop = true;
+    bgm.playbackRate = 0.95;
+    bgm.play();
 }

@@ -6,7 +6,7 @@ serve((req) => {
     console.log(pathname);
 
     if (req.method === "GET" && pathname === "/start") {
-        return new Response("はじまり");
+        return new Response("はじまり\n※音が出ます");
     }
 
     return serveDir(req, {
