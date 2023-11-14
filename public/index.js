@@ -23,7 +23,7 @@ const render = Render.create({
         background: "transparent",
     },
 });
-// console.log(render);
+console.log(render);
 // create a runner
 const runner = Runner.create();
 
@@ -193,6 +193,9 @@ class Dodoco {
             bodyB: this.face,
             pointB: { x: 0, y: SIZE / 2 },
             length: 0,
+            render: {
+                visible: false,
+            },
         });
         const rad = Math.random() * Math.PI;
         const point = Constraint.create({
@@ -204,6 +207,9 @@ class Dodoco {
                 y: SIZE / 2 + (Math.sin(rad) * SIZE) / 2,
             },
             length: 0,
+            render: {
+                visible: false,
+            },
         });
         Composite.add(engine.world, [axis, point]);
         return tail;
@@ -235,6 +241,9 @@ class Dodoco {
             bodyB: this.face,
             pointB: { x: -SIZE / 2, y: -SIZE / 2 },
             length: 0,
+            render: {
+                visible: false,
+            },
         });
         const rad = (Math.random() * Math.PI) / 2;
         const point = Constraint.create({
@@ -246,6 +255,9 @@ class Dodoco {
                 y: -SIZE / 2 - (Math.cos(rad) * EARSIZE) / 2,
             },
             length: 0,
+            render: {
+                visible: false,
+            },
         });
         Composite.add(engine.world, [axis, point]);
         return ear;
@@ -277,6 +289,9 @@ class Dodoco {
             bodyB: this.face,
             pointB: { x: SIZE / 2, y: -SIZE / 2 },
             length: 0,
+            render: {
+                visible: false,
+            },
         });
         const rad = (Math.random() * Math.PI) / 2;
         const point = Constraint.create({
@@ -288,6 +303,9 @@ class Dodoco {
                 y: -SIZE / 2 - (Math.cos(rad) * EARSIZE) / 2,
             },
             length: 0,
+            render: {
+                visible: false,
+            },
         });
         Composite.add(engine.world, [axis, point]);
         return ear;
@@ -306,10 +324,10 @@ d.render.sprite = {
 async function title() {
     const back = document.getElementById("back");
     back.classList.remove("hide");
-    const modal = document.getElementById("modal");
-    modal.querySelector("button").addEventListener("click", () => {
+    const notice = document.getElementById("notice");
+    notice.querySelector("button").addEventListener("click", () => {
         back.classList.add("hide");
-        modal.classList.add("hide");
+        notice.classList.add("hide");
         window.setTimeout(() => {
             runner.enabled = true;
         }, 1);
@@ -318,13 +336,80 @@ async function title() {
     const content = document.getElementById("mcontent");
     const req = await fetch("/start");
     const text = await req.text();
-    content.innerText = text;
+    // content.innerText = text;
 }
 
+const bgm = new Audio("/sounds/Flow_and_Breeze.mp3");
 function playBGM() {
-    const bgm = new Audio("/sounds/Flow_and_Breeze.mp3");
-    bgm.volume = 0.1;
+    if (bgm.paused != 1) return;
+    bgm.volume = 0.05;
     bgm.loop = true;
     bgm.playbackRate = 0.95;
     bgm.play();
 }
+
+document.getElementById("menu").addEventListener("click", async () => {
+    const back = document.getElementById("back");
+    back.classList.remove("hide");
+    const config = document.getElementById("config");
+    config.classList.remove("hide");
+
+    config.querySelector("button").addEventListener("click", () => {
+        back.classList.add("hide");
+        config.classList.add("hide");
+        window.setTimeout(() => {
+            runner.enabled = true;
+        }, 1);
+    });
+
+    const content = document.querySelector(".mcontent");
+});
+
+class slideBar {
+    constructor(element) {
+        this.bar = document.createElement("div");
+        this.thumb = document.createElement("div");
+        this.bar.classList.add("slider");
+        this.thumb.classList.add("thumb");
+        element.appendChild(this.bar);
+        this.bar.appendChild(this.thumb);
+
+        this.bar.addEventListener("mousedown", () => {
+            document.addEventListener("mousemove", this.volmove);
+            document.addEventListener("mouseup", () => {
+                document.removeEventListener("mousemove", this.volmove);
+            });
+        });
+        this.init();
+    }
+    volmove = (e) => {
+        const baseColor = "#c6c4cc";
+        const activeColor = "#ef9839";
+        if (e == null) {
+            const vol = 100;
+            this.bar.style.background = `linear-gradient(to right, ${activeColor} ${vol}%, ${baseColor} ${vol}%)`;
+            this.thumb.style.left = `${(vol / 100) * 150 - 10}px`;
+            return;
+        }
+        const rect = this.bar.getBoundingClientRect();
+        const posx = rect.x;
+        const x = e.clientX;
+        let vol = ((x - posx) / rect.width) * 100;
+        if (vol < 0) vol = 0;
+        if (vol > 100) vol = 100;
+        console.log((this.bar.value = vol));
+
+        this.bar.style.background = `linear-gradient(to right, ${activeColor} ${vol}%, ${baseColor} ${vol}%)`;
+        this.thumb.style.left = `${(vol * 150) / 100 - 10}px`;
+        bgm.volume = (0.05 * vol) / 100;
+    };
+    init = () => {
+        const baseColor = "#c6c4cc";
+        const activeColor = "#ef9839";
+        const vol = 100;
+        this.bar.style.background = `linear-gradient(to right, ${activeColor} ${vol}%, ${baseColor} ${vol}%)`;
+        this.thumb.style.left = `${(vol / 100) * 150 - 10}px`;
+    };
+}
+const slider = document.querySelector(".slider");
+new slideBar(slider);
