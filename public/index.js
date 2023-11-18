@@ -7,6 +7,11 @@ const Events = Matter.Events;
 const Body = Matter.Body;
 const Constraint = Matter.Constraint;
 
+//設定変数格納用
+let configParm = {
+    volume: 0,
+};
+
 // create an engine
 const engine = Engine.create();
 // create a renderer
@@ -47,7 +52,6 @@ Events.on(engine, "collisionStart", (event) => {
     let pairs = event.pairs;
     pairs.forEach((pair) => {
         if (pair.bodyA.label == "dead" || pair.bodyB.label == "dead") {
-            // Render.stop(render);
             runner.enabled = false;
         }
     });
@@ -56,14 +60,8 @@ Events.on(engine, "collisionStart", (event) => {
 function init() {
     createStage();
     title();
-
-    // run the renderer
     Render.run(render);
-    // create runner
-
-    // run the engine
     Runner.run(runner, engine);
-
     runner.enabled = false;
 }
 
@@ -137,6 +135,7 @@ function createStage() {
 //         y: -50 * Math.sin(angle),
 //     });
 // });
+//ドドコ
 const SIZE = 30;
 const EARSIZE = 20;
 class Dodoco {
@@ -312,15 +311,6 @@ class Dodoco {
     }
 }
 
-const d = Bodies.circle(100, 65, 50);
-d.render.sprite = {
-    texture: "./image/Dface.png",
-    xScale: 0.5,
-    yScale: 0.5,
-    xOffset: 0.5,
-    yOffset: 0.5,
-};
-
 async function title() {
     const back = document.getElementById("back");
     back.classList.remove("hide");
@@ -333,16 +323,16 @@ async function title() {
         }, 1);
         playBGM();
     });
-    const content = document.getElementById("mcontent");
+    const content = notice.querySelector(".mcontent");
     const req = await fetch("/start");
     const text = await req.text();
-    // content.innerText = text;
+    content.innerText = text;
 }
 
+//BGM
 const bgm = new Audio("/sounds/Flow_and_Breeze.mp3");
 function playBGM() {
     if (bgm.paused != 1) return;
-    bgm.volume = 0.05;
     bgm.loop = true;
     bgm.playbackRate = 0.95;
     bgm.play();
@@ -357,16 +347,19 @@ document.getElementById("menu").addEventListener("click", async () => {
     config.querySelector("button").addEventListener("click", () => {
         back.classList.add("hide");
         config.classList.add("hide");
+        const json = JSON.stringify(configParm);
+        localStorage.setItem("configParm", json);
         window.setTimeout(() => {
             runner.enabled = true;
         }, 1);
     });
-
-    const content = document.querySelector(".mcontent");
 });
 
+//スライドバー
+//element:親要素 listener:発火させる関数
 class slideBar {
-    constructor(element) {
+    constructor(element, listener) {
+        this.listener = listener;
         this.bar = document.createElement("div");
         this.thumb = document.createElement("div");
         this.bar.classList.add("slider");
@@ -374,42 +367,55 @@ class slideBar {
         element.appendChild(this.bar);
         this.bar.appendChild(this.thumb);
 
-        this.bar.addEventListener("mousedown", () => {
+        this.bar.addEventListener("mousedown", (e) => {
+            this.volmove(e);
             document.addEventListener("mousemove", this.volmove);
             document.addEventListener("mouseup", () => {
                 document.removeEventListener("mousemove", this.volmove);
             });
         });
-        this.init();
+        this.volmove(0);
     }
     volmove = (e) => {
         const baseColor = "#c6c4cc";
         const activeColor = "#ef9839";
-        if (e == null) {
-            const vol = 100;
-            this.bar.style.background = `linear-gradient(to right, ${activeColor} ${vol}%, ${baseColor} ${vol}%)`;
-            this.thumb.style.left = `${(vol / 100) * 150 - 10}px`;
-            return;
+
+        let vol = 0;
+        if (typeof e == "number") {
+            vol = e;
+        } else {
+            const rect = this.bar.getBoundingClientRect();
+            const posx = rect.x;
+            const x = e.clientX;
+            vol = ((x - posx) / rect.width) * 100;
+            if (vol < 0) vol = 0;
+            if (vol > 100) vol = 100;
+            this.bar.value = vol;
         }
-        const rect = this.bar.getBoundingClientRect();
-        const posx = rect.x;
-        const x = e.clientX;
-        let vol = ((x - posx) / rect.width) * 100;
-        if (vol < 0) vol = 0;
-        if (vol > 100) vol = 100;
-        console.log((this.bar.value = vol));
 
         this.bar.style.background = `linear-gradient(to right, ${activeColor} ${vol}%, ${baseColor} ${vol}%)`;
         this.thumb.style.left = `${(vol * 150) / 100 - 10}px`;
-        bgm.volume = (0.05 * vol) / 100;
-    };
-    init = () => {
-        const baseColor = "#c6c4cc";
-        const activeColor = "#ef9839";
-        const vol = 100;
-        this.bar.style.background = `linear-gradient(to right, ${activeColor} ${vol}%, ${baseColor} ${vol}%)`;
-        this.thumb.style.left = `${(vol / 100) * 150 - 10}px`;
+        this.listener(vol);
     };
 }
-const slider = document.querySelector(".slider");
-new slideBar(slider);
+
+//音量スライドバー用関数
+const setVolume = (vol) => {
+    bgm.volume = (0.05 * vol) / 100;
+    configParm.volume = vol;
+};
+
+setConfig();
+function setConfig() {
+    //スライドバー生成
+    const slider = document.querySelector(".slider");
+    const slidbar = new slideBar(slider, setVolume);
+    //音量取得
+    const json = localStorage.getItem("configParm");
+    let vol = 100;
+    if (json != null) {
+        configParm = JSON.parse(json);
+        vol = configParm.volume;
+    }
+    slidbar.volmove(vol);
+}
