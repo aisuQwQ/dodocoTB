@@ -6,13 +6,32 @@
     </head>
     <body>
         <div id="container">
+            <div id="tools">
+                <div id="menu"><span></span></div>
+                <div id="score"></div>
+            </div>
             <div id="back" class="hide"></div>
-            <div id="modal">
-                <div id="mcontent"></div>
+            <div id="notice" class="modal">
+                <span class="title">おしらせ</span>
+                <div class="mcontent"></div>
+                <button>ok</button>
+            </div>
+            <div id="config" class="modal hide">
+                <span class="title">設定</span>
+                <div class="mcontent">
+                    <div class="config">
+                        <div>BGM</div>
+                        <img
+                            src="./image/Speaker.svg"
+                            height="24px"
+                            width="24px"
+                        />
+                        <div class="slider"></div>
+                    </div>
+                </div>
                 <button>ok</button>
             </div>
         </div>
-        <div id="score"></div>
         <button id="start">はじまり</button>
         <button id="test">なに</button>
         <script type="module" src="index.js"></script>
