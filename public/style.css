@@ -3,6 +3,8 @@
     --modal-content-color: #fff3e2;
     --modal-content-shadow: #cfc5b6;
     --border-color: #fff3e2;
+    --hamburger-bar: #b73e26;
+    --result-score: #ba3f27;
 }
 body {
     user-select: none;
@@ -71,7 +73,7 @@ canvas {
 }
 
 .hide {
-    display: none !important;
+    display: none;
 }
 
 #tools {
@@ -103,7 +105,7 @@ canvas {
     height: 3px;
     width: 25px;
     border-radius: 3px;
-    background-color: #000;
+    background-color: var(--hamburger-bar);
     position: absolute;
 }
 #menu > span::before {
@@ -156,4 +158,37 @@ canvas {
 .config > img {
     margin-right: 10px;
     margin-left: 10px;
+}
+
+#white {
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+    position: absolute;
+    transition: all 500ms;
+}
+
+#result > .mcontent {
+    display: flex;
+    flex-direction: column;
+}
+#result > .mcontent > span {
+    font-weight: bold;
+}
+#resultScore {
+    font-size: 128px;
+    background: linear-gradient(
+        var(--main-bg-color) 10%,
+        var(--result-score) 30%,
+        var(--result-score) 70%,
+        var(--main-bg-color) 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: "arial";
+    font-weight: bold;
+    -webkit-text-stroke: 1px
+        linear-gradient(var(--main-bg-color) 30%, rgb(255, 0, 0));
+    letter-spacing: -2px;
 }
