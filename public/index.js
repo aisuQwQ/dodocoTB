@@ -309,7 +309,7 @@ async function title() {
     const back = document.getElementById("back");
     back.classList.remove("hide");
     const notice = document.getElementById("notice");
-    notice.querySelector("button").addEventListener("click", () => {
+    notice.querySelector(".footer button").addEventListener("click", () => {
         back.classList.add("hide");
         notice.classList.add("hide");
         self.setTimeout(() => {
@@ -338,7 +338,7 @@ document.getElementById("menu").addEventListener("click", () => {
     const config = document.getElementById("config");
     config.classList.remove("hide");
 
-    config.querySelector("button").addEventListener("click", () => {
+    config.querySelector(".footer button").addEventListener("click", () => {
         back.classList.add("hide");
         config.classList.add("hide");
         const json = JSON.stringify(configParm);
@@ -422,7 +422,7 @@ function result() {
     const result = document.getElementById("result");
     result.classList.remove("hide");
     //ボタン設定
-    result.querySelector("button").addEventListener("click", () => {
+    result.querySelector(".footer button").addEventListener("click", () => {
         back.classList.add("hide");
         result.classList.add("hide");
         restart();
