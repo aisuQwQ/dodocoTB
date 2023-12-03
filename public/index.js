@@ -1,3 +1,4 @@
+import { tweet } from "./twitter.js";
 const Engine = Matter.Engine;
 const Render = Matter.Render;
 const Runner = Matter.Runner;
@@ -447,3 +448,9 @@ function flash() {
         white.style.opacity = 1;
     }, 500);
 }
+
+//twitter share
+document.querySelector("#share-twitter").addEventListener("click", {
+    score: document.querySelector("#score"),
+    handleEvent: tweet,
+});
