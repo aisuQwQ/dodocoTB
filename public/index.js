@@ -49,10 +49,12 @@ Events.on(engine.world, "afterAdd", (e) => {
 
 //death
 Events.on(engine, "collisionStart", (event) => {
-    let pairs = event.pairs;
+    const pairs = event.pairs;
     pairs.forEach((pair) => {
         if (pair.bodyA.label == "dead" || pair.bodyB.label == "dead") {
             runner.enabled = false;
+            flash();
+            result();
         }
     });
 });
@@ -68,11 +70,11 @@ function init() {
 init();
 
 //restart
-document.getElementById("start").addEventListener("click", () => {
+function restart() {
     Matter.World.clear(engine.world);
     runner.enabled = true;
     createStage();
-});
+}
 
 function createStage() {
     const ground = Bodies.rectangle(225, 700, 380, 60, {
@@ -126,15 +128,7 @@ function createStage() {
 // Composite.add(engine.world, [c, b]);
 // console.log(c);
 
-// document.getElementById("test").addEventListener("click", () => {
-//     const angle = Math.random() * Math.PI * 2;
-//     // angle = Math.PI / 2;
-//     Body.setAngle(tail, angle);
-//     Body.translate(tail, {
-//         x: -50 * Math.cos(angle),
-//         y: -50 * Math.sin(angle),
-//     });
-// });
+document.getElementById("test").addEventListener("click", () => {});
 //ドドコ
 const SIZE = 30;
 const EARSIZE = 20;
@@ -315,10 +309,10 @@ async function title() {
     const back = document.getElementById("back");
     back.classList.remove("hide");
     const notice = document.getElementById("notice");
-    notice.querySelector("button").addEventListener("click", () => {
+    notice.querySelector(".footer button").addEventListener("click", () => {
         back.classList.add("hide");
         notice.classList.add("hide");
-        window.setTimeout(() => {
+        self.setTimeout(() => {
             runner.enabled = true;
         }, 1);
         playBGM();
@@ -338,18 +332,18 @@ function playBGM() {
     bgm.play();
 }
 
-document.getElementById("menu").addEventListener("click", async () => {
+document.getElementById("menu").addEventListener("click", () => {
     const back = document.getElementById("back");
     back.classList.remove("hide");
     const config = document.getElementById("config");
     config.classList.remove("hide");
 
-    config.querySelector("button").addEventListener("click", () => {
+    config.querySelector(".footer button").addEventListener("click", () => {
         back.classList.add("hide");
         config.classList.add("hide");
         const json = JSON.stringify(configParm);
         localStorage.setItem("configParm", json);
-        window.setTimeout(() => {
+        self.setTimeout(() => {
             runner.enabled = true;
         }, 1);
     });
@@ -418,4 +412,38 @@ function setConfig() {
         vol = configParm.volume;
     }
     slidbar.volmove(vol);
+}
+
+//死後処理
+function result() {
+    //表示
+    const back = document.getElementById("back");
+    back.classList.remove("hide");
+    const result = document.getElementById("result");
+    result.classList.remove("hide");
+    //ボタン設定
+    result.querySelector(".footer button").addEventListener("click", () => {
+        back.classList.add("hide");
+        result.classList.add("hide");
+        restart();
+        self.setTimeout(() => {
+            runner.enabled = true;
+        }, 1);
+    });
+    //文言設定
+    const score = result.querySelector("#resultScore");
+    score.innerText = document.querySelector("#score").innerText;
+}
+
+//フラッシュ
+function flash() {
+    const white = document.getElementById("white");
+    white.classList.remove("hide");
+    self.setTimeout(() => {
+        white.style.opacity = 0;
+    }, 1);
+    self.setTimeout(() => {
+        white.classList.add("hide");
+        white.style.opacity = 1;
+    }, 500);
 }
