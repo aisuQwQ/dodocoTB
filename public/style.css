@@ -97,7 +97,6 @@ canvas {
     justify-content: center;
 }
 #share-button > button {
-    background-image: url(./image/TwitterIcon.png);
     background-size: 45px;
     margin: 10px;
     width: 45px;
@@ -105,6 +104,12 @@ canvas {
     border-radius: 20%;
     object-fit: contain;
     border: none;
+}
+#share-twitter {
+    background-image: url(./image/TwitterIcon.png);
+}
+#share-rank {
+    background-image: url(./image/RankIcon.svg);
 }
 #share-button > button:hover {
     border-top: 1px solid var(--modal-content-shadow);
