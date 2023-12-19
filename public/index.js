@@ -12,6 +12,9 @@ const Constraint = Matter.Constraint;
 let configParm = {
     volume: 0,
 };
+const playerData = {
+    lastPlay: null,
+};
 
 // create an engine
 const engine = Engine.create();
@@ -417,6 +420,8 @@ function setConfig() {
 
 //死後処理
 function result() {
+    //時刻記録
+    playerData.lastPlay = new Date();
     //表示
     const back = document.getElementById("back");
     back.classList.remove("hide");
@@ -453,4 +458,18 @@ function flash() {
 document.querySelector("#share-twitter").addEventListener("click", {
     score: document.querySelector("#score"),
     handleEvent: tweet,
+});
+
+//rank share
+document.getElementById("share-rank").addEventListener("click", async () => {
+    const body = JSON.stringify({
+        name: "test",
+        score: document.querySelector("#score").innerText,
+        time: playerData.lastPlay,
+    });
+    const res = await fetch("/rank", {
+        method: "POST",
+        body: body,
+    });
+    console.log(res);
 });
