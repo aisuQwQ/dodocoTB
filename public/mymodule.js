@@ -9,6 +9,6 @@ export function FormatDate(date) {
         " " +
         date.getHours() +
         ":" +
-        date.getMinutes()
+        String(date.getMinutes()).padStart(2, "0")
     );
 }
