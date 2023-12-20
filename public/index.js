@@ -1,4 +1,7 @@
 import { tweet } from "./twitter.js";
+import { post, get } from "./fetcher.js";
+// import { FormatDate } from "./mymodule.js";
+import * as mymod from "./mymodule.js";
 const Engine = Matter.Engine;
 const Render = Matter.Render;
 const Runner = Matter.Runner;
@@ -12,8 +15,9 @@ const Constraint = Matter.Constraint;
 let configParm = {
     volume: 0,
 };
-const playerData = {
+let playerData = {
     lastPlay: null,
+    name: null,
 };
 
 // create an engine
@@ -69,6 +73,8 @@ function init() {
     Render.run(render);
     Runner.run(runner, engine);
     runner.enabled = false;
+    playerData = { ...JSON.parse(localStorage.getItem("playerData")) };
+    console.log(playerData);
 }
 
 init();
@@ -310,11 +316,11 @@ class Dodoco {
 }
 
 async function title() {
-    const back = document.getElementById("back");
-    back.classList.remove("hide");
+    const dark_back = document.getElementById("dark-back");
+    dark_back.classList.remove("hide");
     const notice = document.getElementById("notice");
     notice.querySelector(".footer button").addEventListener("click", () => {
-        back.classList.add("hide");
+        dark_back.classList.add("hide");
         notice.classList.add("hide");
         self.setTimeout(() => {
             runner.enabled = true;
@@ -337,13 +343,13 @@ function playBGM() {
 }
 
 document.getElementById("menu").addEventListener("click", () => {
-    const back = document.getElementById("back");
-    back.classList.remove("hide");
+    const dark_back = document.getElementById("dark-back");
+    dark_back.classList.remove("hide");
     const config = document.getElementById("config");
     config.classList.remove("hide");
 
     config.querySelector(".footer button").addEventListener("click", () => {
-        back.classList.add("hide");
+        dark_back.classList.add("hide");
         config.classList.add("hide");
         const json = JSON.stringify(configParm);
         localStorage.setItem("configParm", json);
@@ -419,17 +425,17 @@ function setConfig() {
 }
 
 //死後処理
-function result() {
+async function result() {
     //時刻記録
-    playerData.lastPlay = new Date();
+    playerData.lastPlay = await get("/time");
     //表示
-    const back = document.getElementById("back");
-    back.classList.remove("hide");
+    const dark_back = document.getElementById("dark-back");
+    dark_back.classList.remove("hide");
     const result = document.getElementById("result");
     result.classList.remove("hide");
     //ボタン設定
     result.querySelector(".footer button").addEventListener("click", () => {
-        back.classList.add("hide");
+        dark_back.classList.add("hide");
         result.classList.add("hide");
         restart();
         self.setTimeout(() => {
@@ -461,15 +467,38 @@ document.querySelector("#share-twitter").addEventListener("click", {
 });
 
 //rank share
-document.getElementById("share-rank").addEventListener("click", async () => {
+document.getElementById("share-rank").addEventListener("click", () => {
+    const dark_mid = document.getElementById("dark-mid");
+    dark_mid.classList.remove("hide");
+    const send = document.getElementById("send");
+    send.classList.remove("hide");
+
+    //set modal contents
+    const name = playerData.name || "";
+    const score = document.querySelector("#score").innerText;
+    const time = playerData.lastPlay;
+    document.getElementById("name").value = name;
+    document.getElementById("send-score").innerText = score;
+    document.getElementById("send-time").innerText = mymod.FormatDate(time);
+
     const body = JSON.stringify({
-        name: "test",
-        score: document.querySelector("#score").innerText,
-        time: playerData.lastPlay,
+        name: name,
+        score: score,
+        time: time,
     });
-    const res = await fetch("/rank", {
-        method: "POST",
-        body: body,
+
+    const report = document.getElementById("report");
+    send.querySelector(".footer button").addEventListener("click", async () => {
+        const res = await post("/rank", body);
+        if (res.ok) {
+            report.innerText = "送信完了";
+            dark_mid.classList.add("hide");
+            send.classList.add("hide");
+        }
+        report.classList.add("show");
+        report.classList.remove("hide");
+        self.setTimeout(() => {
+            report.classList.remove("show");
+        }, 1500);
     });
-    console.log(res);
 });

@@ -9,10 +9,16 @@ serve(async (req) => {
         return new Response("はじまり\n※音が出ます");
     }
 
+    if (req.method === "GET" && pathname === "/time") {
+        const time = new Date();
+        console.log(time.toISOString());
+        return new Response(time.toISOString());
+    }
+
     if (req.method === "POST" && pathname === "/rank") {
         const json = await req.json();
-        console.log(json.name, json.score, json.time);
-        return new Response();
+        console.log(json.name || "ななしの旅人", json.score, json.time);
+        return new Response("ok");
     }
 
     return serveDir(req, {

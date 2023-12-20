@@ -10,8 +10,33 @@
                 <div id="menu"><span></span></div>
                 <div id="score"></div>
             </div>
-            <div id="back" class="hide"></div>
+            <div id="dark-back" class="hide"></div>
+            <div id="dark-mid" class="hide"></div>
+            <div id="dark-front" class="hide"></div>
             <div id="white" class="hide"></div>
+            <div id="report" class="hide"></div>
+            <div id="send" class="modal hide">
+                <span class="title">送信確認</span>
+                <div class="mcontent">
+                    <div class="bold">なまえ</div>
+                    <div id="send-name">
+                        <div style="width: 24px"></div>
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="ななしの旅人"
+                        />
+                        <img src="./image/pen.svg" height="24px" width="24px" />
+                    </div>
+                    <span class="bold">スコア</span>
+                    <div id="send-score">2</div>
+                    <span class="bold">日付</span>
+                    <div id="send-time">いま</div>
+                </div>
+                <div class="footer">
+                    <button>ok</button>
+                </div>
+            </div>
             <div id="notice" class="modal">
                 <span class="title">おしらせ</span>
                 <div class="mcontent"></div>
