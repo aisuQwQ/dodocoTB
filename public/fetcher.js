@@ -8,6 +8,7 @@ export async function post(path, body) {
     self.setTimeout(() => {
         dark_front.classList.add("hide");
     }, 200);
+    console.log(res);
     return res;
 }
 

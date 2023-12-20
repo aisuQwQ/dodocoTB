@@ -19,6 +19,9 @@ let playerData = {
     lastPlay: null,
     name: null,
 };
+let tempData = {
+    body: null,
+};
 
 // create an engine
 const engine = Engine.create();
@@ -486,19 +489,24 @@ document.getElementById("share-rank").addEventListener("click", () => {
         score: score,
         time: time,
     });
-
-    const report = document.getElementById("report");
-    send.querySelector(".footer button").addEventListener("click", async () => {
-        const res = await post("/rank", body);
+    tempData.body = body;
+});
+document
+    .querySelector("#send .footer button")
+    .addEventListener("click", async () => {
+        const dark_mid = document.getElementById("dark-mid");
+        const report = document.getElementById("report");
+        const res = await post("/rank", tempData.body);
+        dark_mid.classList.add("hide");
+        send.classList.add("hide");
         if (res.ok) {
             report.innerText = "送信完了";
-            dark_mid.classList.add("hide");
-            send.classList.add("hide");
+        } else {
+            report.innerText = "登録済み";
         }
-        report.classList.add("show");
         report.classList.remove("hide");
+        report.classList.add("show");
         self.setTimeout(() => {
             report.classList.remove("show");
         }, 1500);
     });
-});
