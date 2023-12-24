@@ -1,4 +1,5 @@
-export async function post(path, body) {
+export async function post(path, json) {
+    const body = JSON.stringify(json);
     const dark_front = document.getElementById("dark-front");
     dark_front.classList.remove("hide");
     const res = await fetch(path, {

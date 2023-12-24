@@ -12,15 +12,17 @@ const Body = Matter.Body;
 const Constraint = Matter.Constraint;
 
 //設定変数格納用
-let configParm = {
+const configParm = {
     volume: 0,
 };
 let playerData = {
     lastPlay: null,
     name: null,
 };
-let tempData = {
-    body: null,
+const tmpBody = {
+    name: null,
+    score: null,
+    time: null,
 };
 
 // create an engine
@@ -76,7 +78,7 @@ function init() {
     Render.run(render);
     Runner.run(runner, engine);
     runner.enabled = false;
-    playerData = { ...JSON.parse(localStorage.getItem("playerData")) };
+    playerData = mymod.GetLS("playerData");
     console.log(playerData);
 }
 
@@ -354,8 +356,7 @@ document.getElementById("menu").addEventListener("click", () => {
     config.querySelector(".footer button").addEventListener("click", () => {
         dark_back.classList.add("hide");
         config.classList.add("hide");
-        const json = JSON.stringify(configParm);
-        localStorage.setItem("configParm", json);
+        mymod.SetLS("configParm", configParm);
         self.setTimeout(() => {
             runner.enabled = true;
         }, 1);
@@ -418,12 +419,8 @@ function setConfig() {
     const slider = document.querySelector(".slider");
     const slidbar = new slideBar(slider, setVolume);
     //音量取得
-    const json = localStorage.getItem("configParm");
-    let vol = 100;
-    if (json != null) {
-        configParm = JSON.parse(json);
-        vol = configParm.volume;
-    }
+    const configParm = mymod.GetLS("configParm");
+    const vol = configParm?.volume === null ? 100 : configParm?.volume;
     slidbar.volmove(vol);
 }
 
@@ -484,19 +481,25 @@ document.getElementById("share-rank").addEventListener("click", () => {
     document.getElementById("send-score").innerText = score;
     document.getElementById("send-time").innerText = mymod.FormatDate(time);
 
-    const body = JSON.stringify({
-        name: name,
-        score: score,
-        time: time,
-    });
-    tempData.body = body;
+    tmpBody.name = name;
+    tmpBody.score = score;
+    tmpBody.time = time;
 });
 document
     .querySelector("#send .footer button")
     .addEventListener("click", async () => {
         const dark_mid = document.getElementById("dark-mid");
         const report = document.getElementById("report");
-        const res = await post("/rank", tempData.body);
+
+        if ((tmpBody.name = document.getElementById("name").value) == "") {
+            tmpBody.name = "ななしの旅人";
+        } else {
+            playerData.name = tmpBody.name;
+            playerData.lastPlay = tmpBody.time;
+            mymod.SetLS("playerData", playerData);
+        }
+
+        const res = await post("/rank", tmpBody);
         dark_mid.classList.add("hide");
         send.classList.add("hide");
         if (res.ok) {
