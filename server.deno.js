@@ -5,10 +5,10 @@ import * as dotenv from "https://deno.land/std@0.210.0/dotenv/mod.ts";
 
 const env = await dotenv.load({
     export: true,
-    envPath: ".env",
-    examplePath: ".env.example",
+    envPath: "./.env",
+    examplePath: "./.env.example",
 });
-
+console.log(env);
 const SEASON = 0;
 const supabase = createClient(env["SUPABASE_URL"], env["SUPABASE_KEY"]);
 
