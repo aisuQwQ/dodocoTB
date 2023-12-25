@@ -1,14 +1,15 @@
 import { serve } from "https://deno.land/std@0.194.0/http/server.ts";
 import { serveDir } from "https://deno.land/std@0.194.0/http/file_server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.33.1";
 import * as dotenv from "https://deno.land/std@0.210.0/dotenv/mod.ts";
 
-const env = await dotenv.load({
+await dotenv.load({
     export: true,
-    envPath: ".env",
-    examplePath: ".env.example",
+    envPath: "./.env",
+    examplePath: "./.env.example",
 });
 
+const env = Deno.env.toObject();
 const SEASON = 0;
 const supabase = createClient(env["SUPABASE_URL"], env["SUPABASE_KEY"]);
 
