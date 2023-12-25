@@ -5,8 +5,8 @@ import * as dotenv from "https://deno.land/std@0.210.0/dotenv/mod.ts";
 
 const env = await dotenv.load({
     export: true,
-    envPath: ".env",
-    examplePath: ".env.example",
+    envPath: "./.env",
+    examplePath: "./.env.example",
 });
 
 const SEASON = 0;
