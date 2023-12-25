@@ -422,7 +422,8 @@ function setConfig() {
     const slidbar = new slideBar(slider, setVolume);
     //音量取得
     const configParm = mymod.GetLS("configParm");
-    const vol = configParm?.volume === null ? 100 : configParm?.volume;
+    const vol = configParm?.volume >= 0 ? configParm?.volume : 100;
+    console.log(vol);
     slidbar.volmove(vol);
 }
 
