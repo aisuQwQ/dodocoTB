@@ -66,6 +66,8 @@ Events.on(engine, "collisionStart", (event) => {
     pairs.forEach((pair) => {
         if (pair.bodyA.label == "dead" || pair.bodyB.label == "dead") {
             runner.enabled = false;
+            console.log(engine);
+            tmpBody.score = (engine.world.bodies.length - 2) / 4;
             flash();
             result();
         }
@@ -475,14 +477,12 @@ document.getElementById("share-rank").addEventListener("click", () => {
 
     //set modal contents
     const name = playerData.name || "";
-    const score = document.querySelector("#score").innerText;
     const time = playerData.lastPlay;
     document.getElementById("name").value = name;
-    document.getElementById("send-score").innerText = score;
+    document.getElementById("send-score").innerText = tmpBody.score;
     document.getElementById("send-time").innerText = mymod.FormatDate(time);
 
     tmpBody.name = name;
-    tmpBody.score = score;
     tmpBody.time = time;
 });
 document
