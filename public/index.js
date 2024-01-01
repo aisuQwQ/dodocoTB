@@ -4,7 +4,7 @@ import { post, get } from "./fetcher.js";
 import * as mymod from "./mymodule.js";
 const Engine = Matter.Engine;
 const Render = Matter.Render;
-const Runner = Matter.Runner;
+// const Runner = Matter.Runner;
 const Bodies = Matter.Bodies;
 const Composite = Matter.Composite;
 const Events = Matter.Events;
@@ -34,8 +34,41 @@ const tmpBody = {
     time: null,
 };
 
+let isRun = true;
+class MyRunner {
+    constructor() {
+        this.a = "aaa";
+        this.frameCount = 0;
+        this.beforeTime = null;
+        this.deltaTime = 0;
+        this.FPS = 60;
+        self.requestAnimationFrame(() => this.mainLoop());
+    }
+    mainLoop() {
+        this.frameCount++;
+        if (!this.beforeTime) {
+            this.beforeTime = Date.now();
+        }
+        const now = Date.now();
+        this.deltaTime += now - this.beforeTime;
+
+        if (now - this.beforeTime >= 1000) {
+            this.beforeTime = now + ((now - this.beforeTime) % 1000);
+            console.log("fps:" + this.frameCount);
+            this.FPS = this.frameCount;
+            this.frameCount = 0;
+        }
+
+        if (isRun) {
+            Engine.update(engine, 1000 / this.FPS);
+        }
+        self.requestAnimationFrame(() => this.mainLoop());
+    }
+}
+
 // create an engine
 const engine = Engine.create();
+engine.gravity.y = 1.5;
 // create a renderer
 const render = Render.create({
     element: document.body.children[0],
@@ -50,13 +83,11 @@ const render = Render.create({
         background: "transparent",
     },
 });
-console.log(render);
-// create a runner
-const runner = Runner.create();
+console.log(engine);
 
 //click
 document.querySelector("#container > canvas").addEventListener("click", (e) => {
-    if (runner.enabled == true) {
+    if (isRun == true) {
         const margin = document.getElementById("container").getBoundingClientRect().x;
         // let box = Bodies.rectangle(e.clientX, 0, 80, 80);
         // Composite.add(engine.world, box);
@@ -74,7 +105,7 @@ Events.on(engine, "collisionStart", (event) => {
     const pairs = event.pairs;
     pairs.forEach((pair) => {
         if (pair.bodyA.label == "dead" || pair.bodyB.label == "dead") {
-            runner.enabled = false;
+            isRun = false;
             console.log(engine);
             tmpBody.score = (engine.world.bodies.length - 2) / 4;
             flash();
@@ -87,8 +118,8 @@ function init() {
     createStage();
     title();
     Render.run(render);
-    Runner.run(runner, engine);
-    runner.enabled = false;
+    new MyRunner();
+    isRun = false;
     playerData = mymod.GetLS("playerData");
     console.log(playerData);
 }
@@ -98,7 +129,7 @@ init();
 //restart
 function restart() {
     Matter.World.clear(engine.world);
-    runner.enabled = true;
+    isRun = true;
     createStage();
 }
 
@@ -334,7 +365,7 @@ async function title() {
         dark_back.classList.add("hide");
         notice.classList.add("hide");
         self.setTimeout(() => {
-            runner.enabled = true;
+            isRun = true;
         }, 1);
         playBGM();
     });
@@ -364,7 +395,7 @@ document.getElementById("menu").addEventListener("click", () => {
         config.classList.add("hide");
         mymod.SetLS("configParm", configParm);
         self.setTimeout(() => {
-            runner.enabled = true;
+            isRun = true;
         }, 1);
     });
 });
@@ -446,7 +477,7 @@ async function result() {
         result.classList.add("hide");
         restart();
         self.setTimeout(() => {
-            runner.enabled = true;
+            isRun = true;
         }, 1);
     });
     //文言設定
