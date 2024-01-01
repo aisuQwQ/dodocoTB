@@ -6,18 +6,32 @@
     --border-color: #fff3e2;
     --hamburger-bar: #b73e26;
     --result-score: #ba3f27;
+    --scale: 1;
 }
 body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
     user-select: none;
     position: relative;
     font-family: "メイリオ", "Meiryo", sans-serif;
 }
 
+html {
+    transform: scale(var(--scale));
+    transform-origin: left top;
+    height: calc(100% / var(--scale));
+    width: calc(100% / var(--scale));
+}
+
 #container {
     position: relative;
-    width: max-content;
-    height: max-content;
+    width: 450px;
+    height: 800px;
     overflow: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 canvas {
@@ -186,8 +200,7 @@ canvas {
     font-family: "arial";
     font-weight: bold;
     /* text-shadow: 1px 1px 1px #000; */
-    -webkit-text-stroke: 1px
-        linear-gradient(var(--main-bg-color) 30%, rgb(255, 0, 0));
+    -webkit-text-stroke: 1px linear-gradient(var(--main-bg-color) 30%, rgb(255, 0, 0));
     letter-spacing: -2px;
 }
 
@@ -247,8 +260,7 @@ canvas {
     -webkit-text-fill-color: transparent;
     font-family: "arial";
     font-weight: bold;
-    -webkit-text-stroke: 1px
-        linear-gradient(var(--main-bg-color) 30%, rgb(255, 0, 0));
+    -webkit-text-stroke: 1px linear-gradient(var(--main-bg-color) 30%, rgb(255, 0, 0));
     letter-spacing: -2px;
 }
 

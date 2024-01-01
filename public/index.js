@@ -11,6 +11,15 @@ const Events = Matter.Events;
 const Body = Matter.Body;
 const Constraint = Matter.Constraint;
 
+let SCALE = Math.min(window.innerHeight / 800, window.innerWidth / 450);
+document.querySelector(":root").style.setProperty("--scale", SCALE);
+console.log(SCALE);
+
+window.onresize = () => {
+    SCALE = Math.min(window.innerHeight / 800, window.innerWidth / 450);
+    document.querySelector(":root").style.setProperty("--scale", SCALE);
+};
+
 //設定変数格納用
 const configParm = {
     volume: 0,
@@ -48,16 +57,16 @@ const runner = Runner.create();
 //click
 document.querySelector("#container > canvas").addEventListener("click", (e) => {
     if (runner.enabled == true) {
-        console.log(e.clientX);
+        const margin = document.getElementById("container").getBoundingClientRect().x;
         // let box = Bodies.rectangle(e.clientX, 0, 80, 80);
         // Composite.add(engine.world, box);
-        new Dodoco(e.clientX, 100);
+        new Dodoco((e.clientX - margin) / SCALE, 100);
+        console.log((e.clientX - margin) / SCALE);
     }
 });
 
 Events.on(engine.world, "afterAdd", (e) => {
-    document.getElementById("score").innerText =
-        (e.source.bodies.length - 2) / 4;
+    document.getElementById("score").innerText = (e.source.bodies.length - 2) / 4;
 });
 
 //death
@@ -156,12 +165,7 @@ class Dodoco {
         this.tail = this.createTail(x, y);
         this.earL = this.createEarL(x, y);
         this.earR = this.createEarR(x, y);
-        Composite.add(engine.world, [
-            this.tail,
-            this.earR,
-            this.earL,
-            this.face,
-        ]);
+        Composite.add(engine.world, [this.tail, this.earR, this.earL, this.face]);
     }
     createFace(x, y) {
         const face = Bodies.polygon(x, y, 8, 30, {
@@ -486,31 +490,29 @@ document.getElementById("share-rank").addEventListener("click", () => {
     tmpBody.name = name;
     tmpBody.time = time;
 });
-document
-    .querySelector("#send .footer button")
-    .addEventListener("click", async () => {
-        const dark_mid = document.getElementById("dark-mid");
-        const report = document.getElementById("report");
+document.querySelector("#send .footer button").addEventListener("click", async () => {
+    const dark_mid = document.getElementById("dark-mid");
+    const report = document.getElementById("report");
 
-        if ((tmpBody.name = document.getElementById("name").value) == "") {
-            tmpBody.name = "ななしの旅人";
-        } else {
-            playerData.name = tmpBody.name;
-            playerData.lastPlay = tmpBody.time;
-            mymod.SetLS("playerData", playerData);
-        }
+    if ((tmpBody.name = document.getElementById("name").value) == "") {
+        tmpBody.name = "ななしの旅人";
+    } else {
+        playerData.name = tmpBody.name;
+        playerData.lastPlay = tmpBody.time;
+        mymod.SetLS("playerData", playerData);
+    }
 
-        const res = await post("/rank", tmpBody);
-        dark_mid.classList.add("hide");
-        send.classList.add("hide");
-        if (res.ok) {
-            report.innerText = "送信完了";
-        } else {
-            report.innerText = "登録済み";
-        }
-        report.classList.remove("hide");
-        report.classList.add("show");
-        self.setTimeout(() => {
-            report.classList.remove("show");
-        }, 1500);
-    });
+    const res = await post("/rank", tmpBody);
+    dark_mid.classList.add("hide");
+    send.classList.add("hide");
+    if (res.ok) {
+        report.innerText = "送信完了";
+    } else {
+        report.innerText = "登録済み";
+    }
+    report.classList.remove("hide");
+    report.classList.add("show");
+    self.setTimeout(() => {
+        report.classList.remove("show");
+    }, 1500);
+});
