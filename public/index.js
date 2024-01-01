@@ -11,12 +11,12 @@ const Events = Matter.Events;
 const Body = Matter.Body;
 const Constraint = Matter.Constraint;
 
-let SCALE = Math.min(window.innerHeight / 800, window.innerWidth / 450);
+let SCALE = Math.min(window.innerHeight / 1920, window.innerWidth / 1080);
 document.querySelector(":root").style.setProperty("--scale", SCALE);
 console.log(SCALE);
 
 window.onresize = () => {
-    SCALE = Math.min(window.innerHeight / 800, window.innerWidth / 450);
+    SCALE = Math.min(window.innerHeight / 1920, window.innerWidth / 1080);
     document.querySelector(":root").style.setProperty("--scale", SCALE);
 };
 
@@ -68,16 +68,16 @@ class MyRunner {
 
 // create an engine
 const engine = Engine.create();
-engine.gravity.y = 1.5;
+engine.gravity.y = 3.6;
 // create a renderer
 const render = Render.create({
     element: document.body.children[0],
     engine: engine,
     options: {
-        width: 450,
-        height: 800,
+        width: 1080,
+        height: 1920,
         // showAngleIndicator: true,
-        // showCollisions: true,
+        showCollisions: true,
         // showDebug: true,
         wireframes: false,
         background: "transparent",
@@ -134,17 +134,17 @@ function restart() {
 }
 
 function createStage() {
-    const ground = Bodies.rectangle(225, 700, 380, 60, {
+    const ground = Bodies.rectangle(540, 1680, 912, 144, {
         isStatic: true,
         render: {
             sprite: {
                 texture: "./image/ground.png",
-                xScale: 0.5,
-                yScale: 0.5,
+                xScale: 1.2,
+                yScale: 1.2,
             },
         },
     });
-    const deadline = Bodies.rectangle(225, 803, 900, 5, {
+    const deadline = Bodies.rectangle(540, 1927, 2160, 12, {
         isStatic: true,
         label: "dead",
     });
@@ -185,10 +185,10 @@ function createStage() {
 // Composite.add(engine.world, [c, b]);
 // console.log(c);
 
-document.getElementById("test").addEventListener("click", () => {});
+// document.getElementById("test").addEventListener("click", () => {});
 //ドドコ
-const SIZE = 30;
-const EARSIZE = 20;
+const SIZE = 72;
+const EARSIZE = 48;
 class Dodoco {
     constructor(x, y) {
         this.group = Body.nextGroup(true);
@@ -199,13 +199,13 @@ class Dodoco {
         Composite.add(engine.world, [this.tail, this.earR, this.earL, this.face]);
     }
     createFace(x, y) {
-        const face = Bodies.polygon(x, y, 8, 30, {
+        const face = Bodies.polygon(x, y, 19, 72, {
             collisionFilter: { group: this.group },
         });
         face.render.sprite = {
             texture: "./image/Dface.png",
-            xScale: 0.3,
-            yScale: 0.3,
+            xScale: 0.72,
+            yScale: 0.72,
             xOffset: 0.5,
             yOffset: 0.5,
         };
@@ -227,8 +227,8 @@ class Dodoco {
         );
         tail.render.sprite = {
             texture: "./image/Dtail.png",
-            xScale: 0.3,
-            yScale: 0.3,
+            xScale: 0.72,
+            yScale: 0.72,
             xOffset: 0.5,
             yOffset: 0.5,
         };
@@ -275,8 +275,8 @@ class Dodoco {
         );
         ear.render.sprite = {
             texture: "./image/Dear.png",
-            xScale: 0.2,
-            yScale: 0.2,
+            xScale: 0.48,
+            yScale: 0.48,
             xOffset: 0.5,
             yOffset: 0.3,
         };
@@ -323,8 +323,8 @@ class Dodoco {
         );
         ear.render.sprite = {
             texture: "./image/Dear.png",
-            xScale: 0.2,
-            yScale: 0.2,
+            xScale: 0.48,
+            yScale: 0.48,
             xOffset: 0.5,
             yOffset: 0.3,
         };
@@ -439,7 +439,7 @@ class slideBar {
         }
 
         this.bar.style.background = `linear-gradient(to right, ${activeColor} ${vol}%, ${baseColor} ${vol}%)`;
-        this.thumb.style.left = `${(vol * 150) / 100 - 10}px`;
+        this.thumb.style.left = `${(vol * 150) / SCALE / 100 - 10}px`;
         this.listener(vol);
     };
 }
