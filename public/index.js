@@ -95,6 +95,12 @@ document.querySelector("#container > canvas").addEventListener("click", (e) => {
         console.log((e.clientX - margin) / SCALE);
     }
 });
+document.body.addEventListener("click", () => {
+    window.scroll({
+        top: 0,
+        behavior: "smooth",
+    });
+});
 
 Events.on(engine.world, "afterAdd", (e) => {
     document.getElementById("score").innerText = (e.source.bodies.length - 2) / 4;
@@ -547,3 +553,13 @@ document.querySelector("#send .footer button").addEventListener("click", async (
         report.classList.remove("show");
     }, 1500);
 });
+
+document.body.addEventListener(
+    "touchstart",
+    (e) => {
+        if (e.touches && e.touches.length > 1) {
+            e.preventDefault();
+        }
+    },
+    { passive: false }
+);

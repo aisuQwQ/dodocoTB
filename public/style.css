@@ -8,24 +8,28 @@
     --result-score: #ba3f27;
     --scale: 1;
 }
+html {
+    touch-action: manipulation;
+    user-select: none;
+}
+
 body {
     height: 100%;
     width: 100%;
     margin: 0;
-    user-select: none;
     position: relative;
     font-family: "メイリオ", "Meiryo", sans-serif;
     font-size: 38px;
     background-image: url(./image/background.png);
     background-position: center;
-    background-size: auto;
+    background-size: contain;
 }
 button {
     font-family: "メイリオ", "Meiryo", sans-serif;
     font-size: 38px;
 }
 
-html {
+body {
     transform: scale(var(--scale));
     transform-origin: left top;
     height: calc(100% / var(--scale));
@@ -40,7 +44,7 @@ html {
     overflow: hidden;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0%);
     box-shadow: 0px 0px 20px 0px white;
 }
 
@@ -277,7 +281,7 @@ canvas {
 #send {
     z-index: 11;
     height: 720px;
-    height: fit-content;
+    /* height: fit-content; */
 }
 
 #report {

@@ -58,6 +58,6 @@ serve(async (req) => {
         fsRoot: "public",
         urlRoot: "",
         showDirListing: true,
-        enableCors: false,
+        enableCors: true,
     });
 });
