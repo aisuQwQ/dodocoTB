@@ -95,6 +95,12 @@ document.querySelector("#container > canvas").addEventListener("click", (e) => {
         console.log((e.clientX - margin) / SCALE);
     }
 });
+document.body.addEventListener("click", () => {
+    window.scroll({
+        top: 0,
+        behavior: "smooth",
+    });
+});
 
 Events.on(engine.world, "afterAdd", (e) => {
     document.getElementById("score").innerText = (e.source.bodies.length - 2) / 4;
@@ -412,13 +418,27 @@ class slideBar {
         element.appendChild(this.bar);
         this.bar.appendChild(this.thumb);
 
-        this.bar.addEventListener("mousedown", (e) => {
-            this.volmove(e);
-            document.addEventListener("mousemove", this.volmove);
-            document.addEventListener("mouseup", () => {
-                document.removeEventListener("mousemove", this.volmove);
-            });
+        if (this.IsMobile()) {
+            this.down = "touchstart";
+            this.move = "touchmove";
+            this.up = "touchend";
+        } else {
+            this.down = "mousedown";
+            this.move = "mousemove";
+            this.up = "mouseup";
+        }
+
+        document.addEventListener(this.up, () => {
+            document.removeEventListener(this.move, this.volmove);
         });
+        element.addEventListener(
+            this.down,
+            (e) => {
+                this.volmove(e);
+                document.addEventListener(this.move, this.volmove);
+            },
+            { passive: true }
+        );
         this.volmove(0);
     }
     volmove = (e) => {
@@ -429,6 +449,7 @@ class slideBar {
         if (typeof e == "number") {
             vol = e;
         } else {
+            if (this.IsMobile()) e = e.touches[0];
             const rect = this.bar.getBoundingClientRect();
             const posx = rect.x;
             const x = e.clientX;
@@ -439,9 +460,13 @@ class slideBar {
         }
 
         this.bar.style.background = `linear-gradient(to right, ${activeColor} ${vol}%, ${baseColor} ${vol}%)`;
-        this.thumb.style.left = `${(vol * 150) / SCALE / 100 - 10}px`;
+        this.thumb.style.left = `${(vol * 300) / 100 - 10}px`;
         this.listener(vol);
     };
+    IsMobile() {
+        if (navigator.userAgent.match(/(iPhone|iPod|Android.*Mobile)/i)) return true;
+        return false;
+    }
 }
 
 //音量スライドバー用関数
@@ -453,7 +478,7 @@ const setVolume = (vol) => {
 setConfig();
 function setConfig() {
     //スライドバー生成
-    const slider = document.querySelector(".slider");
+    const slider = document.querySelector(".slider-container");
     const slidbar = new slideBar(slider, setVolume);
     //音量取得
     const configParm = mymod.GetLS("configParm");
@@ -547,3 +572,13 @@ document.querySelector("#send .footer button").addEventListener("click", async (
         report.classList.remove("show");
     }, 1500);
 });
+
+document.body.addEventListener(
+    "touchstart",
+    (e) => {
+        if (e.touches && e.touches.length > 1) {
+            e.preventDefault();
+        }
+    },
+    { passive: false }
+);
