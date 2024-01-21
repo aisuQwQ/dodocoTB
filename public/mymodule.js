@@ -1,16 +1,6 @@
 export function FormatDate(date) {
     if (!date) return null;
-    return (
-        date.getFullYear() +
-        "/" +
-        (date.getMonth() + 1) +
-        "/" +
-        date.getDate() +
-        " " +
-        date.getHours() +
-        ":" +
-        String(date.getMinutes()).padStart(2, "0")
-    );
+    return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0");
 }
 
 export function GetLS(key) {

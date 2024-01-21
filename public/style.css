@@ -227,6 +227,12 @@ canvas {
     border-radius: 12px;
     border: 3px solid #fff;
 }
+.slider-container {
+    display: flex;
+    align-items: center;
+    width: 320px;
+    height: 63px;
+}
 .thumb {
     position: relative;
     width: 36px;
@@ -263,12 +269,7 @@ canvas {
 }
 #resultScore {
     font-size: 310px;
-    background: linear-gradient(
-        var(--main-bg-color) 10%,
-        var(--result-score) 30%,
-        var(--result-score) 70%,
-        var(--main-bg-color) 100%
-    );
+    background: linear-gradient(var(--main-bg-color) 10%, var(--result-score) 30%, var(--result-score) 70%, var(--main-bg-color) 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
