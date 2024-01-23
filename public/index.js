@@ -14,6 +14,7 @@ const Constraint = Matter.Constraint;
 let SCALE = Math.min(window.innerHeight / 1920, window.innerWidth / 1080);
 document.querySelector(":root").style.setProperty("--scale", SCALE);
 console.log(SCALE);
+document.getElementById("container").classList.remove("hide");
 
 window.onresize = () => {
     SCALE = Math.min(window.innerHeight / 1920, window.innerWidth / 1080);
