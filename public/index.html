@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <link rel="stylesheet" type="text/css" href="style.css" />
         <script src="https://www.unpkg.com/matter-js@0.19.0/build/matter.min.js"></script>
     </head>
     <body>
-        <div id="container">
+        <div id="container" class="hide">
             <div id="tools">
                 <div id="menu"><span></span></div>
                 <div id="score"></div>
             </div>
-            <div id="back" class="hide"></div>
+            <div id="dark-back" class="hide"></div>
+            <div id="dark-mid" class="hide"></div>
+            <div id="dark-front" class="hide"></div>
             <div id="white" class="hide"></div>
+            <div id="report" class="hide"></div>
+            <div id="send" class="modal hide">
+                <span class="title">送信確認</span>
+                <div class="mcontent">
+                    <div class="bold">なまえ</div>
+                    <div id="send-name">
+                        <div style="width: 58px"></div>
+                        <input type="text" id="name" placeholder="ななしの旅人" />
+                        <img src="./image/pen.svg" height="58px" width="58px" />
+                    </div>
+                    <span class="bold">スコア</span>
+                    <div id="send-score">2</div>
+                    <span class="bold">日付</span>
+                    <div id="send-time">いま</div>
+                </div>
+                <div class="footer">
+                    <button>ok</button>
+                </div>
+            </div>
             <div id="notice" class="modal">
                 <span class="title">おしらせ</span>
                 <div class="mcontent"></div>
@@ -24,12 +46,8 @@
                 <div class="mcontent">
                     <div class="config">
                         <div>BGM</div>
-                        <img
-                            src="./image/Speaker.svg"
-                            height="24px"
-                            width="24px"
-                        />
-                        <div class="slider"></div>
+                        <img src="./image/Speaker.svg" height="58px" width="58px" />
+                        <div class="slider-container"></div>
                     </div>
                 </div>
                 <div class="footer">
@@ -44,7 +62,7 @@
                     <div id="share">
                         シェアする
                         <div id="share-button">
-                            <button id="shere-rank"></button>
+                            <button id="share-rank"></button>
                             <button id="share-twitter"></button>
                         </div>
                     </div>
@@ -54,7 +72,7 @@
                 </div>
             </div>
         </div>
-        <button id="test">なに</button>
+        <!-- <button id="test">なに</button> -->
         <script type="module" src="index.js"></script>
     </body>
 </html>
