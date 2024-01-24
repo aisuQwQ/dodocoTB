@@ -11,6 +11,7 @@
 html {
     touch-action: manipulation;
     user-select: none;
+    height: 100%;
 }
 
 body {
@@ -22,7 +23,6 @@ body {
     font-size: 38px;
     background-image: url(./image/background.png);
     background-position: center;
-    background-size: contain;
 }
 button {
     font-family: "メイリオ", "Meiryo", sans-serif;
@@ -44,7 +44,7 @@ body {
     overflow: hidden;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, 0%);
+    transform: translate(-50%, -50%);
     box-shadow: 0px 0px 20px 0px white;
 }
 
